@@ -1,30 +1,26 @@
-// 项目命名空间：统一管理所有类
-
 namespace GYSsApp2
 {
     /// <summary>
-    /// 程序入口类
-    /// 作用：整个应用程序的启动入口，负责初始化并打开第一个窗口
+    /// 这个类创建了入口方法Main，
+    /// 以及一些全局的配置，比如name 和 LoveWords，
+    /// 还声明了动画方法的枚举值。
     /// </summary>
     internal static class Program
     {
-        /// <summary>
-        /// 程序【主入口点】
-        /// 整个程序从这里开始运行
-        /// [STAThread]：Windows 桌面程序必需的线程特性
-        /// </summary>
-        [STAThread]
+        [STAThread]// 强制主线程为 STA 模式
         private static void Main()
         {
+            //初始化保存的配置
             SaveHelper.LoadAll();
+            
             // 初始化应用程序的系统配置
             ApplicationConfiguration.Initialize();
 
             // 启动程序，打开【启动警告窗口】Start
             Application.Run(new Start());
-        }
+        }//程序入口
 
-        internal static string name = "无名氏";
+        internal static string name = "无名氏";//默认名称
         internal static string[] LoveWords =
 #pragma warning disable IDE0300 // 简化集合初始化
         {
@@ -49,19 +45,19 @@ namespace GYSsApp2
             "别一个人扛",
             "新的一天加油",
             "我真的很想你"
-        };
+        };//默认情话库
         internal static Color[] Colors =
         {
             Color.LightPink, Color.Pink, Color.HotPink, Color.Lavender,
             Color.Plum, Color.Violet, Color.LightSalmon, Color.PeachPuff, Color.IndianRed
-        };
-        internal static Font defaultFont = new("微软雅黑", 42, FontStyle.Bold);
-        internal static AnimationMethod animationMethod = AnimationMethod.direct;
-        internal static int delaytime = 80;
-        internal static bool NeedHeart = true;
-        internal static bool NeedRain = true;
-        internal static int MessageLifeCycle = 0;
-        internal static int AppLifeCycle = 0;
+        };//默认颜色库
+        internal static Font defaultFont = new("微软雅黑", 42, FontStyle.Bold);//默认字体
+        internal static AnimationMethod animationMethod = AnimationMethod.direct;//默认动画方法
+        internal static int delaytime = 80;//默认每次弹窗的间隔
+        internal static bool NeedHeart = true;//默认是否开启绘制心型
+        internal static bool NeedRain = true;//默认是否开启弹窗雨
+        internal static int MessageLifeCycle = 0;//默认弹窗生命周期
+        internal static int AppLifeCycle = 0;//默认App生命周期
 
         internal enum AnimationMethod
         {
@@ -69,6 +65,6 @@ namespace GYSsApp2
             gentle,
             cool,
             NoFloat
-        }
+        }//动画方法枚举
     }
 }

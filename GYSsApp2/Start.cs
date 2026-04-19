@@ -1,10 +1,12 @@
-﻿// 项目命名空间：GYSsApp2（整个程序的容器）
-namespace GYSsApp2
+﻿namespace GYSsApp2
 {
     /// <summary>
-    /// 启动警告窗口
-    /// 功能：显示程序提示，提供【启动】和【退出】两个选项
-    /// 这是程序的入口界面，也是整个程序唯一的逻辑分支
+    /// 这个类是第一个打开的窗口，
+    /// 允许让用户选择是
+    /// 打开自定义窗口、
+    /// 打开关于窗口、
+    /// 开始运行程序、
+    /// 还是退出程序。
     /// </summary>
     public partial class Start : Form
     {
@@ -25,11 +27,8 @@ namespace GYSsApp2
             // 隐藏当前启动警告窗口
             Hide();
 
-            // 创建主程序窗口实例
-            Form1 form1 = new();
-
-            // 显示主程序窗口，开始执行浪漫动画效果
-            form1.Show();
+            // 创建进程管理实例
+            ProcessManager form1 = new();
 
             //程序生命周期
             if (Program.AppLifeCycle <= 0)
@@ -47,16 +46,17 @@ namespace GYSsApp2
         /// </summary>
         private void button2_Click(object sender, EventArgs e)
         {
-            // 强制安全退出程序
-            Environment.Exit(0);
+            Application.Exit();
         }
 
+        //弹出自定义窗口
         private void button1_Click(object sender, EventArgs e)
         {
             TextChanger textChanger = new();
             _ = textChanger.ShowDialog();
         }
 
+        //弹出关于窗口
         private void button3_Click(object sender, EventArgs e)
         {
             About about = new();

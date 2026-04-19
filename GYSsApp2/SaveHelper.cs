@@ -33,9 +33,17 @@ namespace GYSsApp2
         public FontStyle Style { get; set; }
     }
 
+    /// <summary>
+    /// 提供应用程序全局配置的 JSON 持久化功能。
+    /// </summary>
+    /// <remarks>
+    /// 配置文件使用 <see cref="System.Text.Json.JsonSerializer"/> 序列化，
+    /// 保存于应用程序启动目录下的 "GYSconfig.json" 文件中。
+    /// 若文件不存在，加载时将静默跳过，保留当前内存中的默认值。
+    /// </remarks>
     public static class SaveHelper
     {
-        private static readonly string path = Path.Combine(Application.StartupPath, "GYSconfig.json");
+        private static readonly string path = Path.Combine(Application.StartupPath, "GYSconfig.json");//保存位置和文件名
 
         // 保存：打包 → 转 JSON → 写文件
         public static void SaveAll()
@@ -78,7 +86,7 @@ namespace GYSsApp2
 
                 //程序生命周期保存
                 AppLifeCycel = Program.AppLifeCycle,
-            };
+            };//config实例
 
             // 一句话保存
             string json = JsonSerializer.Serialize(config, new JsonSerializerOptions { WriteIndented = true });
@@ -91,7 +99,7 @@ namespace GYSsApp2
             if (!File.Exists(path))
             {
                 return;
-            }
+            }//文件如果不存在，就不加载
 
             // 一句话加载
             string json = File.ReadAllText(path);

@@ -1,5 +1,8 @@
 ﻿namespace GYSsApp2
 {
+    /// <summary>
+    /// 这个类是让用户修改全局配置的窗口
+    /// </summary>
     public partial class TextChanger : Form
     {
         public TextChanger()
@@ -10,19 +13,8 @@
             colorListBox.DrawMode = DrawMode.OwnerDrawFixed;
             colorListBox.ItemHeight = 26;
 
-            NameBox.Text = Program.name;
-            LoveWordsBox.Lines = Program.LoveWords;
-            RefreshColorList();
-            fontDialog1.Font = Program.defaultFont;
-            label1.Font = fontDialog1.Font;
-            comboBox1.DataSource = Enum.GetValues(typeof(Program.AnimationMethod));
-            comboBox1.SelectedItem = Program.animationMethod;
-            numericUpDown1.Value = Program.delaytime;
-            numericUpDown2.Value = Program.MessageLifeCycle;
-            numericUpDown3.Value = Program.AppLifeCycle;
-            checkBox1.Checked = Program.NeedHeart;
-            checkBox2.Checked = Program.NeedRain;
-        }
+            RefreshUIData();
+        }//构造方法
 
         private void RefreshColorList()
         {
@@ -36,14 +28,14 @@
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
             Program.name = NameBox.Text;
-        }
+        }//名字更改
 
         private void LoveWordsBox_TextChanged(object sender, EventArgs e)
         {
             Program.LoveWords = LoveWordsBox.Lines
                                  .Where(line => !string.IsNullOrWhiteSpace(line))
                                  .ToArray();
-        }
+        }//情话更改
 
         private void btnAddColor_Click(object sender, EventArgs e)
         {
@@ -52,7 +44,7 @@
                 Program.Colors = Program.Colors.Append(colorDialog1.Color).ToArray();
                 RefreshColorList();
             }
-        }
+        }//加颜色
 
         private void btnDelColor_Click(object sender, EventArgs e)
         {
@@ -61,9 +53,8 @@
                 Program.Colors = Program.Colors.Where(c => c != selectColor).ToArray();
                 RefreshColorList();
             }
-        }
+        }//减颜色
 
-        // ✅ 修复：安全绘制，永不崩溃，颜色正常显示
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
@@ -100,17 +91,17 @@
 
                 ev.DrawFocusRectangle();
             };
-        }
+        }//绘制颜色色块之间的边框
 
         private void colorListBox_Click(object sender, EventArgs e)
         {
             DeleteBox.Enabled = colorListBox.SelectedIndex != -1;
-        }
+        }//当点击颜色框时更新 减颜色
 
         private void TextChanger_FormClosing(object sender, FormClosingEventArgs e)
         {
             SaveHelper.SaveAll();
-        }
+        }//保存修改
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -177,29 +168,17 @@
 
 
                 //界面更新
-                NameBox.Text = Program.name;
-                LoveWordsBox.Lines = Program.LoveWords;
-                RefreshColorList();
-                fontDialog1.Font = Program.defaultFont;
-                label1.Font = fontDialog1.Font;
-                comboBox1.DataSource = Enum.GetValues(typeof(Program.AnimationMethod));
-                comboBox1.SelectedItem = Program.animationMethod;
-                numericUpDown1.Value = Program.delaytime;
-                numericUpDown2.Value = Program.MessageLifeCycle;
-                numericUpDown3.Value = Program.AppLifeCycle;
-                checkBox1.Checked = Program.NeedHeart;
-                checkBox2.Checked = Program.NeedRain;
+                RefreshUIData();
             }
-        }
+        }//设为默认值
 
         private void button2_Click(object sender, EventArgs e)
         {
             _ = fontDialog1.ShowDialog();
             label1.Font = fontDialog1.Font;
             Program.defaultFont = fontDialog1.Font;
-        }
+        }//打开字体对话框
 
-        //预览
         private async void button3_Click(object sender, EventArgs e)
         {
             Random random = new();
@@ -214,43 +193,59 @@
             message.Show();
             await Task.Delay(5000);
             message.Close();
-        }
+        }//预览效果
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
 #pragma warning disable CS8605 // 取消装箱可能为 null 的值。
             Program.animationMethod = (Program.AnimationMethod)comboBox1.SelectedItem;
 #pragma warning restore CS8605 // 取消装箱可能为 null 的值。
-        }
+        }//修改动画方法
 
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
         {
             Program.delaytime = Convert.ToInt32(numericUpDown1.Value);
-        }
+        }//修改延迟时间
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
             Program.NeedHeart = checkBox1.Checked;
-        }
+        }//修改是否出现红心
 
         private void checkBox2_CheckedChanged(object sender, EventArgs e)
         {
             Program.NeedRain = checkBox2.Checked;
-        }
+        }//修改是否出现弹窗雨
 
         private void numericUpDown2_ValueChanged(object sender, EventArgs e)
         {
             Program.MessageLifeCycle = Convert.ToInt32(numericUpDown2.Value);
-        }
+        }//修改弹窗生命周期
 
         private void numericUpDown3_ValueChanged(object sender, EventArgs e)
         {
             Program.AppLifeCycle = Convert.ToInt32(numericUpDown3.Value);
-        }
+        }//修改app生命周期
 
         private void button4_Click(object sender, EventArgs e)
         {
             _ = MessageBox.Show("@\"=======================\r\n【变量替换使用教程】\r\n=======================\r\n在 Love Words 里可以直接使用以下变量：\r\n\r\n{NAME}        → 替换成你设置的昵称\r\n{TIME}         → 替换成当前时间\r\n{DAY}          → 替换成星期几\r\n\r\n{DATE:CN}   → 中文日期（2025年12月22日）\r\n{DATE:EN}   → 英文日期（2025,12,22）\r\n{DATE:JP}   → 日文日期（2025年12月22日）\r\n{DATE:KO}   → 韩文日期（2025.12.22）\r\n\r\n=======================\r\n使用例子：\r\n{NAME}，现在是 {TIME}\r\n今天是 {DATE:CN} {DAY}\r\n=======================\";", "Tip", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
+        }//情话输入框字符串插值教学
+
+        private void RefreshUIData()
+        {
+            NameBox.Text = Program.name;
+            LoveWordsBox.Lines = Program.LoveWords;
+            RefreshColorList();
+            fontDialog1.Font = Program.defaultFont;
+            label1.Font = fontDialog1.Font;
+            comboBox1.DataSource = Enum.GetValues(typeof(Program.AnimationMethod));
+            comboBox1.SelectedItem = Program.animationMethod;
+            numericUpDown1.Value = Program.delaytime;
+            numericUpDown2.Value = Program.MessageLifeCycle;
+            numericUpDown3.Value = Program.AppLifeCycle;
+            checkBox1.Checked = Program.NeedHeart;
+            checkBox2.Checked = Program.NeedRain;
+        }//刷新UI上的数据
     }
 }

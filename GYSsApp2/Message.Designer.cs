@@ -53,7 +53,6 @@
             ShowInTaskbar = false;
             Text = "Message";
             TopMost = true;
-            KeyUp += Message_KeyUp;
             ResumeLayout(false);
             PerformLayout();
         }
